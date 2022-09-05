@@ -1,0 +1,8 @@
+server:
+  address: localhost
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: riot-api-key

@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "riot.api.key",
+  "type": "java.lang.String",
+  "description": "A description for 'riot.api.key'"
+}]}
