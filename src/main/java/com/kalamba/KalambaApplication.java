@@ -1,4 +1,4 @@
-package com.kalamba.kalamba;
+package com.kalamba;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

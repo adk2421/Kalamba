@@ -1,6 +1,4 @@
-package com.kalamba.kalamba.Controller;
-
-import org.springframework.web.bind.annotation.RestController;
+package com.kalamba.api;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,27 +8,13 @@ import java.net.URL;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Component;
 
-
-@RestController
-public class SummonerController {
-    final static String API_KEY = "RGAPI-2993ce6f-d23f-4e5c-99c2-9d880be51431";
+@Component
+public class SummonerInfoAPI implements API {
     
-    @PostMapping("/searchSummoner")
-    public String searchSummoner(@RequestParam String summonerName) throws ParseException {
-        System.out.println("id : " + summonerName);
-        JSONObject result = null;
-        summonerName = summonerName.replaceAll(" ", "%20");
-        String userInfoURL = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+ summonerName + "?api_key=" + API_KEY;
-
-        result = callAPI(summonerName, userInfoURL);
-
-        return result.toJSONString();
-    }
-
-    private JSONObject callAPI(String summonerName, String requestURL) throws ParseException {
+    @Override
+    public JSONObject callAPI(String requestURL) throws ParseException {
         
         /* REST API 호출하기 */
         URL url = null;
@@ -79,9 +63,6 @@ public class SummonerController {
 		System.out.println("getId : " + result.get("id"));
         System.out.println("getId : " + result.get("puuid"));
 
-        // String userMatchURL = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+ userInfoJson.get("puuid") + "/ids?start=0&count=20&api_key=" + API_KEY;
-
         return result;
     }
-    
 }
