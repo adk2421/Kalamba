@@ -3,12 +3,15 @@ package com.kalamba.controller;
 import com.kalamba.api.SummonerInfoAPI;
 import com.kalamba.util.JsonToMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 // import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +21,14 @@ import com.kalamba.util.JsonToMap;
 
 @Controller
 public class SummonerController {
-    final static String API_KEY = "RGAPI-4aeb9ce3-7680-456d-9590-405ec2b449ee";
+    final static String API_KEY = "RGAPI-cc1bf21e-71d8-4ccf-83c5-0694761a9d20";
     
     @PostMapping(value="/searchSummoner")
     public String selectUserInfo(@RequestParam String summonerName, Model model) throws ParseException {
-        /*  
+        /*
         ### 소환사 기본 정보 ###
+        : Return value: SummonerDTO
+
         ex) PATH PARAMETERS
             summonerName = "권오빈님"
                     ↓
@@ -38,43 +43,93 @@ public class SummonerController {
             }
         */
         String SummonerName = summonerName.replaceAll(" ", "%20");
-        String userInfoURL = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+ SummonerName + "?api_key=" + API_KEY;
-        JSONObject result = null;
+        String summonerInfoURL = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+ SummonerName + "?api_key=" + API_KEY;
+        JSONObject summonerInfo = null;
 
         SummonerInfoAPI summonerInfoAPI = new SummonerInfoAPI();
-        result = summonerInfoAPI.callAPI(userInfoURL);
+        summonerInfo = summonerInfoAPI.callObjAPI(summonerInfoURL);
 
         JsonToMap jsonToMap = new JsonToMap();
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        map = jsonToMap.JsonObjectToMap(result);
+        Map<String, Object> summoner = new HashMap<String, Object>();
+        summoner = jsonToMap.JsonObjectToMap(summonerInfo);
 
-        model.addAllAttributes(map);
+        model.addAllAttributes(summoner);
 
-        /* 소환사 매치 정보
-        String userMatchURL = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+ map.get("puuid") + "/ids?start=0&count=20&api_key=" + API_KEY;
-        result = summonerInfoAPI.callAPI(userMatchURL);
+        /* 
+        ### 소환사 전적 ###
+        : Return value: List[string]
 
-        // JSONObject to Map
-        try { 
-            map = new ObjectMapper().readValue(result.toJSONString(), Map.class);
- 
-        } catch (JsonParseException e) { 
-            e.printStackTrace();
-        } catch (JsonMappingException e) { 
-            e.printStackTrace();
-        } catch (IOException e) { 
-            e.printStackTrace();
+        ex) PATH PARAMETERS
+            puuid = "7LcGDG-Ai_YFYbk-hU8XUFSlFDK6KBCV_IbCCqRrvEjDzODKTGu2hSqY8M8V1zZryWwx39VuYBDRtw"
+                    ↓
+            RESPONSE BODY [
+                "KR_6105283224",
+                "KR_6105280673",
+                "KR_6105159499",
+                "KR_6105137923",
+                "KR_6105146026",
+                ...
+                ...
+            ]
+        */
+        int matchCount = 10;
+        String userMatchURL = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+ summoner.get("puuid") + "/ids?start=0&count=" + matchCount + "&api_key=" + API_KEY;
+        JSONArray summonerMatch = null;
+
+        summonerMatch = summonerInfoAPI.callArrAPI(userMatchURL);
+
+        ArrayList<String> matchId = new ArrayList<String>();
+        
+        for (int i = 0; i < summonerMatch.size(); i++) {
+            matchId.add(summonerMatch.get(i).toString());
+
+            System.out.println(summonerMatch.get(i));
         }
 
-        System.out.println("map : " + map);
+        /* 
+        ### 소환사 전적 정보 ###
+        : Return value: MatchDto
+
+        ex) PATH PARAMETERS
+            matchId = "KR_6105283224"
+                    ↓
+            RESPONSE BODY {
+                "metadata": {
+                    "dataVersion": "2",
+                    "matchId": "KR_6105283224",
+                    "participants": [
+                        "mYCzpzKLbtksSc0qtWeOLSzbhFSMNQqsk4oupHmTO2U_olHbL5MO7YePFTSeYStyt3LpdYo81wVlcA",
+                        ...
+                    ]
+                "info": {
+                    ...
+                }
+            }
         */
+        String matchInfoURL = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId.get(0) + "?api_key=" + API_KEY;
+        JSONObject matchInfo = null;
+
+        matchInfo = summonerInfoAPI.callObjAPI(matchInfoURL);
+
+        JSONObject matchInfoDetail = (JSONObject) matchInfo.get("info");
+        
+        System.out.println("gameDuration : " + matchInfoDetail.get("gameDuration"));
+        System.out.println("gameMode : " + matchInfoDetail.get("gameMode"));
+
+        JSONArray summonerMatchInfo = (JSONArray )matchInfoDetail.get("participants");
+
+        JSONObject jsonObject1 = (JSONObject) summonerMatchInfo.get(6);
+
+        System.out.println("summonerName : " + jsonObject1.get("summonerName"));
+        System.out.println("deaths : " + jsonObject1.get("deaths"));
+        System.out.println("championName : " + jsonObject1.get("championName"));
+
+        JSONObject jsonObject2 = (JSONObject) jsonObject1.get("challenges");
+
+        System.out.println("kda : " + jsonObject2.get("kda"));
+        System.out.println("teamDamagePercentage : " + jsonObject2.get("teamDamagePercentage"));
 
         return "summonerInfo";
     }
-
-
-
-    
-    
 }
