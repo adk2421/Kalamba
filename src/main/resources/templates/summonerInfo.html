@@ -9,8 +9,18 @@
     
 </head>
 <body>
+    <h1>소환사 정보</h1>
     <p th:text="${accountId}"></p>
     <p th:text="${name}"></p>
     <p th:text="${summonerLevel}"></p>
+    <p>--------------------------------</p>
+    <h2>플레이어 정보</h2>
+    <img th:src="${championImage}" />
+    <p th:text="${gameDuration}"></p>
+    <p th:text="${gameMode}"></p>
+    <p th:text="${summonerName}"></p>
+    <p th:text="${deaths}"></p>
+    <p th:text="${kda}"></p>
+    <p th:text="${teamDamagePercentage}"></p>
 </body>
 </html>
