@@ -2,6 +2,7 @@ package com.kalamba.api;
 
 import java.util.Map;
 
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 public class ChampionInfoAPI {
@@ -13,7 +14,7 @@ public class ChampionInfoAPI {
     public String getDataVer(String type) throws ParseException {
         String url = "https://ddragon.leagueoflegends.com/realms/kr.json"; // LOL 기본 Data Version API URL
 
-        Map<String, Object> result = API.callAPI(url);
+        Map<String, Object> result = (Map<String, Object>) API.callAPI(url, JSONObject.class);
 
         Map<String, Object> dataVersion = (Map<String, Object>) result.get("n");
 
@@ -25,7 +26,7 @@ public class ChampionInfoAPI {
         String dataVersion = getDataVer("champion");
         String url = "https://ddragon.leagueoflegends.com/cdn/" + dataVersion + "/data/ko_KR/champion/"+ championName + ".json"; // 챔피언 정보 API URL
 
-        Map<String, Object> result = API.callAPI(url);
+        Map<String, Object> result = (Map<String, Object>) API.callAPI(url, JSONObject.class);
 
         result = (Map<String, Object>) result.get("data");
 

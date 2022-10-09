@@ -5,9 +5,7 @@ import com.kalamba.api.ChampionInfoAPI;
 import com.kalamba.util.JsonToMap;
 import com.kalamba.util.SummonerUtil;
 
-import java.nio.charset.spi.CharsetProvider;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -18,9 +16,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@SuppressWarnings("unchecked")
 @Controller
 public class SummonerController {
-    final static String API_KEY = "RGAPI-e172e71c-db53-4eba-9377-1585e850ac17";
+    final static String API_KEY = "RGAPI-9916fe5d-8f4b-4acb-8f96-75c923785446";
 
     API API = new API();
     SummonerUtil summonerUtil = new SummonerUtil();
@@ -50,12 +49,9 @@ public class SummonerController {
         String SummonerName = summonerName.replaceAll(" ", "%20"); // 소환사 이름 검색 시, 공백 변환
         String summonerInfoURL = summonerUtil.makeURL("KR", SummonerName, "/summoner/v4/summoners/by-name/"); // API URL 설정
         
-        JSONObject summonerInfo = API.callObjAPI(summonerInfoURL); // API 호출
+        Map<String, Object> summonerInfo = (Map<String, Object>) API.callAPI(summonerInfoURL, JSONObject.class); // API 호출
 
-        Map<String, Object> summoner = new HashMap<String, Object>();
-        summoner = jsonToMap.JsonObjectToMap(summonerInfo); // 소환사 정보 Map에 저장
-
-        model.addAllAttributes(summoner); // 소환사 정보 Model에 저장
+        model.addAllAttributes(summonerInfo); // 소환사 정보 Model에 저장
 
         /* 
         ### 소환사 전적 ###
@@ -75,17 +71,9 @@ public class SummonerController {
             ]
         */
         int matchCount = 10; // 가져올 최근 경기 갯수
-        String userMatchURL = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+ summoner.get("puuid") + "/ids?start=0&count=" + matchCount + "&api_key=" + API_KEY; // API URL 설정
-        
-        JSONArray summonerMatch = API.callArrAPI(userMatchURL); // API 호출
+        String userMatchURL = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/"+ summonerInfo.get("puuid") + "/ids?start=0&count=" + matchCount + "&api_key=" + API_KEY; // API URL 설정
 
-        ArrayList<String> matchId = new ArrayList<String>();
-        
-        for (int i=0; i < summonerMatch.size(); i++) { // JSONArray to ArrayList
-            matchId.add(summonerMatch.get(i).toString());
-
-            System.out.println(summonerMatch.get(i));
-        }
+        ArrayList<String> matchId = (ArrayList<String>) API.callAPI(userMatchURL, JSONArray.class); // API 호출
 
         /* 
         ### 소환사 전적 정보 ###
@@ -111,30 +99,30 @@ public class SummonerController {
             // 게임 참가 플레이어 정보
             String matchInfoURL = "https://asia.api.riotgames.com/lol/match/v5/matches/" + matchId.get(0) + "?api_key=" + API_KEY; // API URL 설정
             
-            JSONObject matchInfo = API.callObjAPI(matchInfoURL); // API 호출
+            Map<String, Object> matchInfo = (Map<String, Object>)API.callAPI(matchInfoURL, JSONObject.class); // API 호출
 
-            JSONObject matchInfoDetail = (JSONObject) matchInfo.get("info");
+            Map<String, Object> matchInfoDetail = (Map<String, Object>) matchInfo.get("info");
             
-            model.addAttribute("gameDuration", summonerUtil.timeFommater((Long) matchInfoDetail.get("gameDuration")));
+            model.addAttribute(summonerUtil.timeFommater(Integer.parseInt(matchInfoDetail.get("gameDuration").toString())));
             model.addAttribute("gameMode", matchInfoDetail.get("gameMode"));
 
-            JSONArray summonerMatchInfo = (JSONArray) matchInfoDetail.get("participants");
+            ArrayList<Map<String, Object>> summonerMatchInfo = (ArrayList<Map<String, Object>>) matchInfoDetail.get("participants");
 
-            JSONObject jsonObject1 = (JSONObject) summonerMatchInfo.get(6);
+            Map<String, Object> jsonObject1 = (Map<String, Object>) summonerMatchInfo.get(6);
 
             model.addAttribute("summonerName", jsonObject1.get("summonerName"));
             model.addAttribute("deaths", jsonObject1.get("deaths"));
 
             String championName = jsonObject1.get("championName").toString();
 
-            JSONObject jsonObject2 = (JSONObject) jsonObject1.get("challenges");
+            Map<String, Object> jsonObject2 = (Map<String, Object>) jsonObject1.get("challenges");
 
             model.addAttribute("kda", jsonObject2.get("kda"));
             model.addAttribute("teamDamagePercentage", jsonObject2.get("teamDamagePercentage"));
-        //}
 
-        model.addAttribute("championName", championInfoAPI.getChampInfo(championName));
-        model.addAttribute("championImage", "http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + championName + ".png"); // 챔피언 이미지
+            model.addAttribute("championName", championInfoAPI.getChampInfo(championName));
+            model.addAttribute("championImage", "http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + championName + ".png"); // 챔피언 이미지
+        //}
 
         return "summonerInfo";
     }

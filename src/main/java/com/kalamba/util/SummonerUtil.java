@@ -1,7 +1,7 @@
 package com.kalamba.util;
 
 public class SummonerUtil {
-    final static String API_KEY = "RGAPI-e172e71c-db53-4eba-9377-1585e850ac17";
+    final static String API_KEY = "RGAPI-9916fe5d-8f4b-4acb-8f96-75c923785446";
 
     // LOL API URL 만들기
     public String makeURL(String region, String summonerName, String addURL) {
@@ -23,7 +23,7 @@ public class SummonerUtil {
         return URL;
     }
 
-    public String timeFommater(Long second) {
+    public String timeFommater(int second) {
         String time = "";
 
         if (second >= 3600) {

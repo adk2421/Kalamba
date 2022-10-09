@@ -5,4 +5,4 @@ server:
 spring:
   config:
     activate:
-      on-profile: riot-api-key
+      on-profile: ${riot-api-key}
