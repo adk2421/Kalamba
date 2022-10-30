@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-#Riot API Key
-riot-api-key.yml
+### dotENV ###
+.env*
