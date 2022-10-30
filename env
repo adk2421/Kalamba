@@ -1,6 +1,0 @@
-PORT=8080
-
-# RIOT API
-API_AUTH_KEY=
-API_AUTH_KR_BASEURL=https://kr.api.riotgames.com/lol
-API_AUTH_ASIA_BASEURL=https://asia.api.riotgames.com/lol
