@@ -1,8 +1,15 @@
 server:
   address: localhost
-  port: 8080
-
+  port: ${env.PORT:8080}
+  
 spring:
-  config:
-    activate:
-      on-profile: ${riot-api-key}
+  application:
+    name: KALAMBA
+
+resource:
+  api:
+    key: ${env.API_AUTH_KEY:''}
+  ASIA:
+    baseURL: ${env.API_AUTH_ASIA_BASEURL:''}
+  KR:
+    baseURL: ${env.API_AUTH_KR_BASEURL:''}
