@@ -29,6 +29,9 @@ dependencies {
 
 	implementation 'org.apache.httpcomponents:httpclient:4.5'
 
+	// .env
+	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
+
 	// JSON
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 

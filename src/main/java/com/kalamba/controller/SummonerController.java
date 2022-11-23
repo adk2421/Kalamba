@@ -5,6 +5,8 @@ import com.kalamba.api.ChampionInfoAPI;
 import com.kalamba.util.JsonToMap;
 import com.kalamba.util.SummonerUtil;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @SuppressWarnings("unchecked")
 @Controller
 public class SummonerController {
-    final static String API_KEY = "RGAPI-9916fe5d-8f4b-4acb-8f96-75c923785446";
+    // .env 로드
+    Dotenv dotenv = Dotenv.load();
+    // API Key
+    final String API_KEY = dotenv.get("API_AUTH_KEY");
 
     API API = new API();
     SummonerUtil summonerUtil = new SummonerUtil();

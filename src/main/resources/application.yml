@@ -1,6 +1,6 @@
 server:
   address: localhost
-  port: ${env.PORT:8080}
+  port: ${PORT:8080}
   
 spring:
   application:
@@ -8,8 +8,8 @@ spring:
 
 resource:
   api:
-    key: ${env.API_AUTH_KEY:''}
+    key: ${API_AUTH_KEY:''}
   ASIA:
-    baseURL: ${env.API_AUTH_ASIA_BASEURL:''}
+    baseURL: ${API_AUTH_ASIA_BASEURL:''}
   KR:
-    baseURL: ${env.API_AUTH_KR_BASEURL:''}
+    baseURL: ${API_AUTH_KR_BASEURL:''}
