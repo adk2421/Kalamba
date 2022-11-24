@@ -6,21 +6,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Kalamba</title>
+
+    <!-- Bootstrap JS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"/>
+    <!-- Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/main.css" rel="stylesheet" />
     
 </head>
-<body>
-    <h1>소환사 정보</h1>
-    <p th:text="${accountId}"></p>
-    <p th:text="${name}"></p>
-    <p th:text="${summonerLevel}"></p>
-    <p>--------------------------------</p>
-    <h2>플레이어 정보</h2>
-    <img th:src="${championImage}" />
-    <p th:text="${gameDuration}"></p>
-    <p th:text="${gameMode}"></p>
-    <p th:text="${summonerName}"></p>
-    <p th:text="${deaths}"></p>
-    <p th:text="${kda}"></p>
-    <p th:text="${teamDamagePercentage}"></p>
+<body class="bg-light">
+    <!-- Navigation-->
+    <nav class="navbar navbar-light bg-light static-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Kalamba</a>
+            <a class="btn btn-primary" href="#signup">가입</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="container text-center">
+            <h1>플레이어 정보</h1>
+            <p th:text="${accountId}"></p>
+            <p class="display-1" th:text="${name}"></p>
+            <p th:text="${summonerLevel}"></p>
+        </div>
+        <div class="container text-center"></div>
+            <div class="card mb-3 text" style="max-width: 600px;">
+                <div class="row g-0" style="align-items:center;">
+                    <div class="col-md-3">
+                        <img th:src="${championImage}" class="img-fluid rounded mx-auto d-block" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-3 text" style="max-width: 1000px;">
+                <div class="row g-0" style="align-items:center;">
+                    <div class="col-md-3">
+                        <img th:src="${championImage}" class="img-fluid rounded mx-auto d-block" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img th:src="${championImage}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img th:src="${championImage}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img th:src="${championImage}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 18rem;">
+                        <img th:src="${championImage}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${summonerName}"></h5>
+                            <p class="card-text" th:text="${championName}"></p>
+                            <p class="card-text" th:text="${gameDuration}"></p>
+                            <p class="card-text" th:text="${kda}"></p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>플레이어 정보</h2>
+        <img th:src="${championImage}" />
+        <p th:text="${gameDuration}"></p>
+        <p th:text="${gameMode}"></p>
+        <p th:text="${summonerName}"></p>
+        <p th:text="${deaths}"></p>
+        <p th:text="${kda}"></p>
+        <p th:text="${teamDamagePercentage}"></p>
+    </div>
 </body>
 </html>
