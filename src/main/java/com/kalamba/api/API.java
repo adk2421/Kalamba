@@ -10,6 +10,12 @@ public class API {
 
     RestTemplate restTemplate = new RestTemplate();
 
+    /**
+     * 📢[ API 호출 ]
+     * @param url
+     * @param responseType
+     * @return RestTemplate -> response.getBody()
+     */
     public Object callAPI(String url, Class<?> responseType) {
 
         // 헤더 만들기
