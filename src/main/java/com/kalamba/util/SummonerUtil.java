@@ -25,12 +25,11 @@ public class SummonerUtil {
 
         switch (region) {
             case "KR":
-                URL += KR_BASEURL;
-                URL += addURL + summonerName + "?";
+                URL += KR_BASEURL + addURL + summonerName + "?";
                 break;
 
             case "ASIA":
-                URL += ASIA_BASEURL;
+                URL += ASIA_BASEURL + addURL;
                 break;
         }
 

@@ -21,7 +21,7 @@ public class API {
         // 헤더 만들기
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
-
+        System.out.println("진입" + url);
         // 헤더 오브젝트 만들기
         HttpEntity<?> entity = new HttpEntity<>(headers);
 

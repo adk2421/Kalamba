@@ -22,7 +22,7 @@ public class ChampionInfoAPI {
     }
     
     @SuppressWarnings("unchecked")
-    public String getChampInfo(String championName) throws ParseException {
+    public Object getChampInfo(String championName) throws ParseException {
         String dataVersion = getDataVer("champion");
         String url = "https://ddragon.leagueoflegends.com/cdn/" + dataVersion + "/data/ko_KR/champion/"+ championName + ".json"; // 챔피언 정보 API URL
 
