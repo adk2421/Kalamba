@@ -1,6 +1,7 @@
 package com.kalamba.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -59,7 +60,7 @@ public class SummonerService {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Map<String, Object>> matchV5(String userPID) throws ParseException {
-        int matchCount = 8; // 가져올 최근 경기 갯수
+        int matchCount = 5; // 가져올 최근 경기 갯수
 
         /* 소환사 전적 목록 ID */
         String userMatchURL = summonerUtil.makeURL("ASIA", "", "/match/v5/matches/by-puuid/"+ userPID + "/ids?start=0&count=" + matchCount + "&");
@@ -80,18 +81,30 @@ public class SummonerService {
 
             // 대상 소환사 전적 정보
             Map<String, Object> playerInfo = summonerUtil.selectPlayerInfo(participants, userPID);
-            playerInfo.put("gameDuration", summonerUtil.timeFommater(Integer.parseInt(matchInfoDetail.get("gameDuration").toString())));
-            playerInfo.put("gameMode", matchInfoDetail.get("gameMode"));
+            Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
 
+            // #Common
+            prtPlayerInfo.put("summonerName", playerInfo.get("summonerName"));
+            prtPlayerInfo.put("win", playerInfo.get("win"));
+            prtPlayerInfo.put("gameDuration", summonerUtil.timeFommater(Integer.parseInt(matchInfoDetail.get("gameDuration").toString())));
+            prtPlayerInfo.put("gameMode", matchInfoDetail.get("gameMode"));
+            prtPlayerInfo.put("gameStartTimestamp", summonerUtil.timeStampFommater(matchInfoDetail.get("gameStartTimestamp")));
+
+            // #KDA
             Map<String, Object> challenges = (Map<String, Object>) playerInfo.get("challenges");
-            playerInfo.put("kda", String.format("%.1f", Double.parseDouble(challenges.get("kda").toString())));
-            playerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
+            prtPlayerInfo.put("kda", String.format("%.1f", Double.parseDouble(String.valueOf(challenges.get("kda")))));
+            prtPlayerInfo.put("kills", playerInfo.get("kills"));
+            prtPlayerInfo.put("deaths", playerInfo.get("deaths"));
+            prtPlayerInfo.put("assists", playerInfo.get("assists"));
 
+            prtPlayerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
+
+            // #Champion
             String championName = String.valueOf(playerInfo.get("championName"));
-            playerInfo.put("championName", championInfoAPI.getChampInfo(championName));
-            playerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + championName + ".png"); // 챔피언 이미지
+            prtPlayerInfo.put("championName", championInfoAPI.getChampInfo(championName));
+            prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + championName + ".png"); // 챔피언 이미지
             
-            playerInfoList.add(playerInfo);
+            playerInfoList.add(prtPlayerInfo);
         }
 
         return playerInfoList;
