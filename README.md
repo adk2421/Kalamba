@@ -8,3 +8,5 @@
  [Node.js](https://nodejs.org/ko/)
  
  [dotenv-Java](https://github.com/cdimascio/dotenv-java)
+
+ Error 503 - Riot Server Issue.
