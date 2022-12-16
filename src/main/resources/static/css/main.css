@@ -3,3 +3,11 @@
 	* {
 		font-family: "Noto Sans KR", sans-serif;
 	}
+
+	span.win {
+		color: darkcyan;
+	}
+
+	span.lose {
+		color: tomato;
+	}
