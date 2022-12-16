@@ -1,6 +1,9 @@
 package com.kalamba.util;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -39,6 +42,20 @@ public class SummonerUtil {
     }
 
     /**
+     * 📢[ 게임 전적에서 대상 데이터 추출 ]
+     * @param participants
+     * @param userPID
+     * @return
+     */
+    public Map<String, Object> selectPlayerInfo(ArrayList<Map<String, Object>> participants, String userPID) {
+        for (Map<String, Object> participant : participants) {
+            if (userPID.equals(participant.get("puuid")))
+                return participant;
+        }
+        return null;
+    }
+
+    /**
      * 📢[ 초 단위로 받은 시간 데이터 변환 ]
      * @param second
      * @return
@@ -57,16 +74,14 @@ public class SummonerUtil {
     }
 
     /**
-     * 📢[ 게임 전적에서 대상 데이터 추출 ]
-     * @param participants
-     * @param userPID
+     * 📢[ 문자열로 받은 시간 데이터 변환 ]
+     * @param objTime
      * @return
      */
-    public Map<String, Object> selectPlayerInfo(ArrayList<Map<String, Object>> participants, String userPID) {
-        for (Map<String, Object> participant : participants) {
-            if (userPID.equals(participant.get("puuid")))
-                return participant;
-        }
-        return null;
-    }
+    public String timeStampFommater(Object objTime) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String time = sdf.format(new Timestamp(Long.parseLong((String.valueOf(objTime)))));
+        
+        return time;
+    } 
 }
