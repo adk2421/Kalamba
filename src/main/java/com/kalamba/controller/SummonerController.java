@@ -37,7 +37,8 @@ public class SummonerController {
      */
     @PostMapping(value="/searchSummoner")
     public String selectUserInfo(@RequestParam String summonerName, Model model) throws ParseException {
-        
+        int matchCount = 5; // 가져올 최근 경기 갯수
+
         // 소환사 이름 검색 시, 공백 변환
         String summoner = summonerName.replace(" ", "");
         // API [SUMMONER-V4]
@@ -45,11 +46,16 @@ public class SummonerController {
         
         // 소환사 정보 Model에 저장
         model.addAllAttributes(summonerInfo);
+        model.addAttribute("profileIcon", "http://ddragon.leagueoflegends.com/cdn/13.1.1/img/profileicon/" + summonerInfo.get("profileIconId") + ".png");
 
         // 소환사 puuid 설정
         String userPID = String.valueOf(summonerInfo.get("puuid"));
 
-        ArrayList<Map<String, Object>> playerInfoList = summonerService.matchV5(userPID);
+        ArrayList<Map<String, Object>> playerInfoList = summonerService.matchV5(userPID, matchCount);
+
+        // 소환사 최근 전적
+        Map<String, Object> recentRecord = summonerService.recentRecord(playerInfoList);
+        model.addAttribute("recentRecord", recentRecord);
 
         model.addAttribute("playerInfoList", playerInfoList);
 
