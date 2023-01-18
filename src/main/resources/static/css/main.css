@@ -4,6 +4,11 @@
 		font-family: "Noto Sans KR", sans-serif;
 	}
 
+	.profile-icon {
+		max-width: 144px;
+		height: 100%;
+	}
+
 	.match-detail {
 		cursor: pointer;
 	}
