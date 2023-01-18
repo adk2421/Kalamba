@@ -8,11 +8,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.kalamba.api.API;
 import com.kalamba.api.ChampionInfoAPI;
 import com.kalamba.util.SummonerUtil;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import netscape.javascript.JSObject;
 
 public class SummonerService {
     // .env 로드
@@ -59,9 +61,7 @@ public class SummonerService {
      * @throws ParseException
      */
     @SuppressWarnings("unchecked")
-    public ArrayList<Map<String, Object>> matchV5(String userPID) throws ParseException {
-        int matchCount = 5; // 가져올 최근 경기 갯수
-
+    public ArrayList<Map<String, Object>> matchV5(String userPID, int matchCount) throws ParseException {
         /* 소환사 전적 목록 ID */
         String userMatchURL = summonerUtil.makeURL("ASIA", "", "/match/v5/matches/by-puuid/"+ userPID + "/ids?start=0&count=" + matchCount + "&");
         ArrayList<String> matchId = (ArrayList<String>) API.callAPI(userMatchURL, JSONArray.class);
@@ -82,6 +82,8 @@ public class SummonerService {
             // 대상 소환사 전적 정보
             Map<String, Object> playerInfo = summonerUtil.selectPlayerInfo(participants, userPID);
             Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
+
+            prtPlayerInfo.put("matchInfo", matchInfo);
 
             // #Common
             prtPlayerInfo.put("summonerName", playerInfo.get("summonerName"));
@@ -109,5 +111,27 @@ public class SummonerService {
 
         return playerInfoList;
     }
-    
+
+    /**
+     * 📢[ 소환사 최근 경기 전적 ]
+     * @param userPID
+     * @return
+     * @throws ParseException
+     */
+    public Map<String, Object> recentRecord(ArrayList<Map<String, Object>> playerInfoList) {
+        Map<String, Object> recentRecord = new HashMap<String, Object>();
+        int wins = 0, losses = 0;
+
+        for (Map<String, Object> infoItem : playerInfoList) {
+            if (infoItem.get("win").equals(true))
+                wins++;
+            else
+                losses++;
+        }
+
+        recentRecord.put("wins", wins);
+        recentRecord.put("losses", losses);
+
+        return recentRecord;
+    }
 }
