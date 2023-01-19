@@ -22,7 +22,9 @@
 
     <script>
         function clickedCard(idx) {
-            console.log(idx);
+            let name1 = "[[${playerInfoList[0].matchInfo.info.participants[0]}]]";
+            document.getElementById("modalContents").innerText = name1;
+            document.getElementById("exeModal").click();
         }
     </script>
 
@@ -65,17 +67,15 @@
                         <span class="win" th:text="${recentRecord.wins}"></span>승 
                         <span class="lose" th:text="${recentRecord.losses}"></span>패
                     </p>
-                    <!--<p><span th:text="${playerInfoList[0].matchInfo.info.participants[0].summonerName}"></span></p>-->
                 </div>
             </div>
         </div>
         <hr>
         <div class="container">
             <div class="row">
-                <div class="col" th:each="info, idx : ${playerInfoList}">
+                <div class="col" th:each="info, index : ${playerInfoList}">
                     <div class="card w-auto">
-                        <div class="match-detail" data-bs-toggle="modal" data-bs-target="#myModal">
-                        <!-- <div class="match-detail" th:onclick="clickedCard(${info.championName})"> -->
+                        <div class="match-detail" th:onclick="'clickedCard(' + ${index.index} + ')'">
                             <img th:src="${info.championImage}" class="card-img-top" alt="${info.championName}">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${info.championName}"></h5>
@@ -117,15 +117,15 @@
     </div>
     <!-- /footer -->
     <!-- modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">게임 상세 정보</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>...</p>
+                <div id="modalBody" class="modal-body">
+                    <p id="modalContents">...</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -134,6 +134,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="exeModal" data-bs-toggle="modal" data-bs-target="#detailModal"></input>
     <!-- /modal-->
 </body>
 </html>
