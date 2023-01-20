@@ -1,7 +1,7 @@
 package com.kalamba.controller;
 
 import com.kalamba.api.API;
-import com.kalamba.api.ChampionInfoAPI;
+import com.kalamba.api.ChampionAPI;
 import com.kalamba.service.SummonerService;
 import com.kalamba.util.SummonerUtil;
 
@@ -26,7 +26,7 @@ public class SummonerController {
     API API = new API();
     SummonerService summonerService = new SummonerService();
     SummonerUtil summonerUtil = new SummonerUtil();
-    ChampionInfoAPI championInfoAPI = new ChampionInfoAPI();
+    ChampionAPI championAPI = new ChampionAPI();
     
     /**
      * 📢[ 소환사 검색 ]
