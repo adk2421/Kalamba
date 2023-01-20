@@ -5,7 +5,7 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-public class ChampionInfoAPI {
+public class ChampionAPI {
 
     API API = new API();
 
