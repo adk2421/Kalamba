@@ -21,8 +21,8 @@
     <script src="js/script.js"></script>
 
     <script>
-        function clickedCard(idx) {
-            let name1 = "[[${playerInfoList[0].matchInfo.info.participants[0]}]]";
+        function clickedCard(data) {
+            let name1 = data;
             document.getElementById("modalContents").innerText = name1;
             document.getElementById("exeModal").click();
         }
@@ -73,9 +73,9 @@
         <hr>
         <div class="container">
             <div class="row">
-                <div class="col" th:each="info, index : ${playerInfoList}">
+                <div class="col" th:each="info: ${playerInfoList}">
                     <div class="card w-auto">
-                        <div class="match-detail" th:onclick="'clickedCard(' + ${index.index} + ')'">
+                        <div class="match-detail" th:onclick="'clickedCard(' + ${info} + ')'">
                             <img th:src="${info.championImage}" class="card-img-top" alt="${info.championName}">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${info.championName}"></h5>
