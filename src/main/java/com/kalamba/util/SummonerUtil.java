@@ -60,8 +60,9 @@ public class SummonerUtil {
      * @param second
      * @return
      */
-    public String timeFommater(int second) {
+    public String timeFommater(Object sec) {
         String time = "";
+        int second = (int) sec;
 
         if (second >= 3600) {
             time += second / 3600 + ":";
@@ -83,5 +84,16 @@ public class SummonerUtil {
         String time = sdf.format(new Timestamp(Long.parseLong((String.valueOf(objTime)))));
         
         return time;
-    } 
+    }
+
+    /**
+     * 📢[ 소수점 자르기 ]
+     * @param objTime
+     * @return
+     */
+    public String dpFommater(Object objNum) {
+        double num = Double.parseDouble((String.valueOf(objNum)));
+        
+        return (Math.round(num * 100) ) + "";
+    }
 }
