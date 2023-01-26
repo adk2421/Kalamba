@@ -22,8 +22,8 @@
 
     <script>
         function clickedCard(data) {
-            let name1 = data;
-            document.getElementById("modalContents").innerText = name1;
+            document.getElementById("modalContents1").innerText = "플레이 타임 : " + data.gameDuration;
+            document.getElementById("modalContents2").innerText = "킬 관여율 : " + data.killParticipation + "%";
             document.getElementById("exeModal").click();
         }
     </script>
@@ -75,7 +75,7 @@
             <div class="row">
                 <div class="col" th:each="info: ${playerInfoList}">
                     <div class="card w-auto">
-                        <div class="match-detail" th:onclick="'clickedCard(' + ${info} + ')'">
+                        <div class="match-detail" th:onclick="clickedCard([[${info.prtInfoDetail}]])">
                             <img th:src="${info.championImage}" class="card-img-top" alt="${info.championName}">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${info.championName}"></h5>
@@ -125,7 +125,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="modalBody" class="modal-body">
-                    <p id="modalContents">...</p>
+                    <p id="modalContents1">...</p>
+                    <p id="modalContents2">...</p>
+                    <p id="modalContents3">...</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
