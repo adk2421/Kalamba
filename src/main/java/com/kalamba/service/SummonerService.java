@@ -52,6 +52,8 @@ public class SummonerService {
         
         // 대상 소환사 전적 정보를 저장할 배열
         ArrayList<Map<String, Object>> playerInfoList = new ArrayList<Map<String, Object>>();
+        
+        String champDataVer = (String) championAPI.getDataVer("champion");
 
         for (String matchId : matchIdList) {
             // 플레이한 게임 정보 가져오기
@@ -67,10 +69,10 @@ public class SummonerService {
 
             prtPlayerInfo.put("matchInfo", matchInfo);
 
+            /* Card */
             // #Common
             prtPlayerInfo.put("summonerName", playerInfo.get("summonerName"));
             prtPlayerInfo.put("win", playerInfo.get("win"));
-            prtPlayerInfo.put("gameDuration", summonerUtil.timeFommater(Integer.parseInt(matchInfoDetail.get("gameDuration").toString())));
             prtPlayerInfo.put("gameMode", matchInfoDetail.get("gameMode"));
             prtPlayerInfo.put("gameStartTimestamp", summonerUtil.timeStampFommater(matchInfoDetail.get("gameStartTimestamp")));
 
@@ -86,7 +88,19 @@ public class SummonerService {
             // #Champion
             String championName = String.valueOf(playerInfo.get("championName"));
             prtPlayerInfo.put("championName", championAPI.getChampInfo(championName));
-            prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/12.18.1/img/champion/" + championName + ".png"); // 챔피언 이미지
+            prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/" + champDataVer + "/img/champion/" + championName + ".png"); // 챔피언 이미지
+            
+            /* Detail */
+            JSONObject prtInfoDetail = new JSONObject();
+
+            prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration")));
+            prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation")));
+
+            // for (Map<String, Object> participan : participants) {
+                
+            // }
+
+            prtPlayerInfo.put("prtInfoDetail", prtInfoDetail);
             
             playerInfoList.add(prtPlayerInfo);
         }
