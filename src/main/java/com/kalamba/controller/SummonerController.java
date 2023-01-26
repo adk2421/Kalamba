@@ -39,8 +39,8 @@ public class SummonerController {
     public String selectUserInfo(@RequestParam String summonerName, Model model) throws ParseException {
         int matchCount = 5; // 가져올 최근 경기 갯수
 
-        // 소환사 이름 검색 시, 공백 변환
-        String summoner = summonerName.replace(" ", "");
+        // 소환사 이름 검색 시, 앞뒤 공백 제거
+        String summoner = summonerName.trim();
         // API [SUMMONER-V4]
         Map<String, Object> summonerInfo = summonerService.summonerV4(summoner);
         
