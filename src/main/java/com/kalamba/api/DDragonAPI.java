@@ -2,16 +2,18 @@ package com.kalamba.api;
 
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-public class ChampionAPI {
+import com.kalamba.util.SummonerUtil;
+
+public class DDragonAPI {
 
     API API = new API();
+    SummonerUtil summonerUtil = new SummonerUtil();
 
     /**
-     * 📢[ Data Dragon 최신 버전 ]
+     * 📢[ Data Dragon 현재 버전 ]
      * @param type // "item", "rune", "mastery", "summoner", "champion", "profileicon", "map", "language", "sticker"
      * @return 
      * @throws ParseException
@@ -28,15 +30,30 @@ public class ChampionAPI {
     }
 
     /**
+     * 📢[ 챔피언 정보 리스트 ]
+     * @return
+     * @throws ParseException
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> getChampInfoList(String champDataVer) throws ParseException {
+        String url = summonerUtil.makeURL("DDRAGON", "", champDataVer + "/data/ko_KR/champion.json");
+        
+        Map<String, Object> result = (Map<String, Object>) API.callAPI(url, JSONObject.class);
+        
+        Map<String, Object> champInfoList = (Map<String, Object>) result.get("data");
+
+        return champInfoList;
+    }
+
+    /**
      * 📢[ 챔피언 정보 ]
      * @param championName
      * @return
      * @throws ParseException
      */
     @SuppressWarnings("unchecked")
-    public Object getChampInfo(String championName) throws ParseException {
-        String dataVersion = getDataVer("champion");
-        String url = "https://ddragon.leagueoflegends.com/cdn/" + dataVersion + "/data/ko_KR/champion/"+ championName + ".json"; // 챔피언 정보 API URL
+    public Object getChampInfo(String championName, String champDataVer) throws ParseException {
+        String url = "https://ddragon.leagueoflegends.com/cdn/" + champDataVer + "/data/ko_KR/champion/"+ championName + ".json";
 
         Map<String, Object> result = (Map<String, Object>) API.callAPI(url, JSONObject.class);
 
