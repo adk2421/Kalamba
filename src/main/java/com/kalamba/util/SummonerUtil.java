@@ -25,6 +25,7 @@ public class SummonerUtil {
         String URL = "";
         String ASIA_BASEURL = dotenv.get("API_AUTH_ASIA_BASEURL");
         String KR_BASEURL = dotenv.get("API_AUTH_KR_BASEURL");
+        String DD_BASEURL = dotenv.get("DDRAGON_AUTH_BASEURL");
 
         switch (region) {
             case "KR":
@@ -34,9 +35,14 @@ public class SummonerUtil {
             case "ASIA":
                 URL += ASIA_BASEURL + addURL;
                 break;
+
+            case "DDRAGON":
+                URL += DD_BASEURL + addURL;
+                break;
         }
 
-        URL += "api_key=" + API_KEY;
+        if (!"DDRAGON".equals(region))
+            URL += "api_key=" + API_KEY;
 
         return URL;
     }
@@ -53,6 +59,27 @@ public class SummonerUtil {
                 return participant;
         }
         return null;
+    }
+
+    public boolean getEarlySurrender(ArrayList<Map<String, Object>> participants) {
+        Object TF = true;
+        for (Map<String, Object> participant : participants) {
+            if (TF.equals(participant.get("teamEarlySurrendered")))
+                return true;
+        }
+        return false;
+    }
+
+    public int getRank(String name, ArrayList<Map<String, Object>> participants, Object value) {
+        int rank = 1;
+        int intValue = (int) value;
+
+        for (Map<String, Object> participant : participants) {
+            if (intValue < (int) participant.get(name))
+                rank++;
+        }
+
+        return rank;
     }
 
     /**
