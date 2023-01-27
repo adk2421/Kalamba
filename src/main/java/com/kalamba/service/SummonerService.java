@@ -3,19 +3,19 @@ package com.kalamba.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.kalamba.api.API;
-import com.kalamba.api.ChampionAPI;
+import com.kalamba.api.DDragonAPI;
 import com.kalamba.api.SummonerAPI;
 import com.kalamba.util.SummonerUtil;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import netscape.javascript.JSObject;
 
 public class SummonerService {
     // .env 로드
@@ -24,10 +24,10 @@ public class SummonerService {
     final String API_KEY = dotenv.get("API_AUTH_KEY");
 
     API API = new API();
-    ChampionAPI championAPI = new ChampionAPI();
     SummonerAPI summonerAPI = new SummonerAPI();
     SummonerUtil summonerUtil = new SummonerUtil();
-
+    DDragonAPI DdragonAPI = new DDragonAPI();
+    
     /**
      * 📢[ API 'SUMMONER-V4' ]
      * @param summoner
@@ -47,13 +47,15 @@ public class SummonerService {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Map<String, Object>> matchV5(String userPID, int matchCount) throws ParseException {
+        String champDataVer = (String) DdragonAPI.getDataVer("champion");
+
+        Map<String, Object> champInfoList = DdragonAPI.getChampInfoList(champDataVer);
+
         // 플레이한 게임 리스트 가져오기
         ArrayList<String> matchIdList = summonerAPI.getMatchList(userPID, matchCount);
         
         // 대상 소환사 전적 정보를 저장할 배열
         ArrayList<Map<String, Object>> playerInfoList = new ArrayList<Map<String, Object>>();
-        
-        String champDataVer = (String) championAPI.getDataVer("champion");
 
         for (String matchId : matchIdList) {
             // 플레이한 게임 정보 가져오기
@@ -65,9 +67,10 @@ public class SummonerService {
 
             // 대상 소환사 전적 정보
             Map<String, Object> playerInfo = summonerUtil.selectPlayerInfo(participants, userPID);
-            Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
+            String championName = (String) playerInfo.get("championName");
+            Map<String, Object> champInfo = (Map<String, Object>) champInfoList.get(championName);
 
-            prtPlayerInfo.put("matchInfo", matchInfo);
+            Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
 
             /* Card */
             // #Common
@@ -83,22 +86,26 @@ public class SummonerService {
             prtPlayerInfo.put("deaths", playerInfo.get("deaths"));
             prtPlayerInfo.put("assists", playerInfo.get("assists"));
 
+            // #Champion
+            prtPlayerInfo.put("championName", champInfo.get("name"));
+            prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/" + champDataVer + "/img/champion/" + championName + ".png"); // 챔피언 이미지
+
             prtPlayerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
 
-            // #Champion
-            String championName = String.valueOf(playerInfo.get("championName"));
-            prtPlayerInfo.put("championName", championAPI.getChampInfo(championName));
-            prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/" + champDataVer + "/img/champion/" + championName + ".png"); // 챔피언 이미지
-            
-            /* Detail */
             JSONObject prtInfoDetail = new JSONObject();
 
-            prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration")));
-            prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation")));
-
-            // for (Map<String, Object> participan : participants) {
-                
-            // }
+            // 다시하기 예외처리
+            boolean EarlySurrender = summonerUtil.getEarlySurrender(participants);
+            if (EarlySurrender) {
+                prtInfoDetail.put("disabledDetail", EarlySurrender);
+                prtPlayerInfo.put("win", "remake");
+            } else {
+                /* Detail */
+                prtInfoDetail.put("championImage", prtPlayerInfo.get("championImage")); // 챔피언 이미지
+                prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration")));
+                prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation")));
+                prtInfoDetail.put("totalDamageDealtToChampions", summonerUtil.getRank("totalDamageDealtToChampions", participants, playerInfo.get("totalDamageDealtToChampions")));
+            }
 
             prtPlayerInfo.put("prtInfoDetail", prtInfoDetail);
             
