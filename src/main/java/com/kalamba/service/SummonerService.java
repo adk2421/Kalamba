@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.util.StringUtils;
 
 import com.kalamba.api.API;
 import com.kalamba.api.DDragonAPI;
@@ -68,6 +69,7 @@ public class SummonerService {
             // 대상 소환사 전적 정보
             Map<String, Object> playerInfo = summonerUtil.selectPlayerInfo(participants, userPID);
             String championName = (String) playerInfo.get("championName");
+            championName = StringUtils.capitalize(championName.toLowerCase());
             Map<String, Object> champInfo = (Map<String, Object>) champInfoList.get(championName);
 
             Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
