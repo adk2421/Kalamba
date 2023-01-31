@@ -38,12 +38,12 @@
                 <h1>칼바람나락 전적 검색</h1>
                 <div class="container text-center">
                     <p class="lead">소환사 이름</p>
-                    <form id="summonerSearchForm" action="/searchSummoner" method="post" novalidate>
-                        <div class="d-grid gap-3">
+                    <div class="d-grid gap-3">
+                        <form id="summonerSearchForm" action="/searchSummoner" method="post" novalidate>
                             <input type="text" class="form-control w-50 mx-auto" id="summonerName" name="summonerName" placeholder="Name" required>
-                            <input type="submit" class="btn btn-light w-25 mx-auto" id="" value="검색"/>
-                        </div>
-                    </form>
+                        </form>
+                        <input type="button" class="btn btn-light w-25 mx-auto" id="search" value="검색" onclick="checkName()"/>
+                    </div>
                 </div>
             </div>
         </main>
@@ -51,5 +51,24 @@
             <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
         </footer>
     </div>
+    <!-- modal -->
+    <div class="modal fade" id="loadingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div id="modalBody" class="modal-body">
+                    <div class="font-color-default m-3">
+                        <p>잠시만 기다려 주세요</p>
+                        <div class="spinner-border m-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="exeModal" data-bs-toggle="modal" data-bs-target="#loadingModal"></input>
+    <!-- /modal-->
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
 </body>
 </html>
