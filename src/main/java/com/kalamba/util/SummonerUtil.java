@@ -61,6 +61,12 @@ public class SummonerUtil {
         return null;
     }
 
+    public String getKDA(Map<String, Object> playerInfo) {
+        int KA = (int) playerInfo.get("kills") + (int) playerInfo.get("assists");
+        
+        return String.format("%.1f", (double) KA / (int) playerInfo.get("deaths"));
+    }
+
     public boolean getEarlySurrender(ArrayList<Map<String, Object>> participants) {
         Object TF = true;
         for (Map<String, Object> participant : participants) {
