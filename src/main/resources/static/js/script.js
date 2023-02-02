@@ -1,7 +1,7 @@
 
 function checkName() {
     let name = document.getElementById("summonerName");
-    const regex = /[^0-9A-Za-z가-힣]/ig;
+    const regex = /[^0-9A-Za-z가-힣\s]/ig;
 
     if (name.value == "")
         alert("소환사 이름을 입력해주세요.");
