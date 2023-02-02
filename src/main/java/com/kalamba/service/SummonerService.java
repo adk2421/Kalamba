@@ -73,6 +73,15 @@ public class SummonerService {
             Map<String, Object> champInfo = (Map<String, Object>) champInfoList.get(championName);
 
             Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
+            JSONObject prtInfoDetail = new JSONObject();
+
+            String gameMode = (String) matchInfoDetail.get("gameMode");
+            if (gameMode.equals("ARAM"))
+                gameMode = "칼바람 나락";
+            else if (gameMode.equals("CLASSIC"))
+                gameMode = "소환사의 협곡";
+            else if (gameMode.equals("URF"))
+                gameMode = "우르프";
 
             /* Card */
             // #Common
@@ -80,10 +89,11 @@ public class SummonerService {
             prtPlayerInfo.put("win", playerInfo.get("win"));
             prtPlayerInfo.put("gameMode", matchInfoDetail.get("gameMode"));
             prtPlayerInfo.put("gameStartTimestamp", summonerUtil.timeStampFommater(matchInfoDetail.get("gameStartTimestamp")));
+            prtPlayerInfo.put("gameMode", gameMode);
 
             // #KDA
             Map<String, Object> challenges = (Map<String, Object>) playerInfo.get("challenges");
-            prtPlayerInfo.put("kda", String.format("%.1f", Double.parseDouble(String.valueOf(challenges.get("kda")))));
+            prtPlayerInfo.put("kda", summonerUtil.getKDA(playerInfo));
             prtPlayerInfo.put("kills", playerInfo.get("kills"));
             prtPlayerInfo.put("deaths", playerInfo.get("deaths"));
             prtPlayerInfo.put("assists", playerInfo.get("assists"));
@@ -92,23 +102,25 @@ public class SummonerService {
             prtPlayerInfo.put("championName", champInfo.get("name"));
             prtPlayerInfo.put("championImage", "http://ddragon.leagueoflegends.com/cdn/" + champDataVer + "/img/champion/" + championName + ".png"); // 챔피언 이미지
 
-            prtPlayerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
+            if (!gameMode.equals("우르프")) {
+                prtPlayerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
 
-            JSONObject prtInfoDetail = new JSONObject();
+                
 
-            // 다시하기 예외처리
-            boolean EarlySurrender = summonerUtil.getEarlySurrender(participants);
-            if (EarlySurrender) {
-                prtInfoDetail.put("disabledDetail", EarlySurrender);
-                prtPlayerInfo.put("win", "remake");
-            } else {
-                /* Detail */
-                prtInfoDetail.put("championImage", prtPlayerInfo.get("championImage")); // 챔피언 이미지
-                prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration")));
-                prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation")));
-                prtInfoDetail.put("totalDamageDealtToChampions", summonerUtil.getRank("totalDamageDealtToChampions", participants, playerInfo.get("totalDamageDealtToChampions")));
+                // 다시하기 예외처리
+                boolean EarlySurrender = summonerUtil.getEarlySurrender(participants);
+                if (EarlySurrender) {
+                    prtInfoDetail.put("disabledDetail", EarlySurrender);
+                    prtPlayerInfo.put("win", "remake");
+                } else {
+                    /* Detail */
+                    prtInfoDetail.put("championImage", prtPlayerInfo.get("championImage")); // 챔피언 이미지
+                    prtInfoDetail.put("champExperience", playerInfo.get("champExperience")); // 챔피언 숙련도
+                    prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration"))); // 플레이 타임
+                    prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation"))); // 킬 관여율
+                    prtInfoDetail.put("totalDamageDealtToChampions", summonerUtil.getRank("totalDamageDealtToChampions", participants, playerInfo.get("totalDamageDealtToChampions"))); // 챔피언에게 가한 피해량
+                }
             }
-
             prtPlayerInfo.put("prtInfoDetail", prtInfoDetail);
             
             playerInfoList.add(prtPlayerInfo);
