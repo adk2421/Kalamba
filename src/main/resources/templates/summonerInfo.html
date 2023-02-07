@@ -17,13 +17,22 @@
     <link href="css/main.css?reload" rel="stylesheet" type="text/css" />
     <!-- CSS UPDATE - Chrome: Ctrl + Shift + R -->
 
-    <!-- JS -->
+    <!-- Custom JS -->
     <script src="js/script.js"></script>
 
     <script>
         function clickedCard(data) {
-            document.getElementById("modalContents1").innerText = "플레이 타임 : " + data.gameDuration;
-            document.getElementById("modalContents2").innerText = "킬 관여율 : " + data.killParticipation + "%";
+            if (data?.disabledDetail) {
+                document.getElementById("gameDuration").innerText = "다시하기";
+                document.getElementById("killParticipation").innerText = "";
+                document.getElementById("DamageDealtToChampions").innerText = "";
+            } else {
+                document.getElementById("championImage").innerHTML = '<img class="championImage" src="' + data.championImage + '">';
+                document.getElementById("champExperience").innerText = "챔피언 숙련도 : " + data.champExperience;
+                document.getElementById("gameDuration").innerText = "플레이 타임 : " + data.gameDuration;
+                document.getElementById("killParticipation").innerText = "킬 관여율 : " + data.killParticipation + "%";
+                document.getElementById("DamageDealtToChampions").innerText = "딜량 : " + data.totalDamageDealtToChampions + "등";
+            }
             document.getElementById("exeModal").click();
         }
     </script>
@@ -50,7 +59,7 @@
     <!-- Navigation-->
     <nav class="navbar navbar-light bg-light static-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Kalamba</a>
+            <a class="navbar-brand" href="/">Kalamba</a>
             <a class="btn btn-secondary" href="#signup">가입</a>
         </div>
     </nav>
@@ -78,16 +87,20 @@
                         <div class="match-detail" th:onclick="clickedCard([[${info.prtInfoDetail}]])">
                             <img th:src="${info.championImage}" class="card-img-top" alt="${info.championName}">
                             <div class="card-body">
+                                <p class="card-text">
+                                    <span th:text="${info.gameMode}"></span>
+                                </p>
                                 <h5 class="card-title" th:text="${info.championName}"></h5>
                                 <h5 class="card-title">
                                     <span class="win" th:if="${info.win} == true">승리</span>
                                     <span class="lose" th:if="${info.win} == false">패배</span>
+                                    <span class="remake" th:if="${info.win} == remake">다시하기</span>
                                 </h5>
                                 <p class="card-text">
                                     <span th:text="${info.kills}"></span> /
                                     <span th:text="${info.deaths}"></span> /
-                                    <span th:text="${info.assists}"></span><br/>
-                                    <small class="text-muted">평점 : <span th:text="${info.kda}"></span></small>
+                                    <span th:text="${info.assists}"></span>
+                                    <small class="text-muted">평점: <span th:text="${info.kda}"></span></small>
                                 </p>
                                 <p class="card-text"><small class="text-muted" th:text="${info.gameStartTimestamp}"></small></p>
                             </div>
@@ -117,7 +130,7 @@
     </div>
     <!-- /footer -->
     <!-- modal -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="liveDemoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,9 +138,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="modalBody" class="modal-body">
-                    <p id="modalContents1">...</p>
-                    <p id="modalContents2">...</p>
-                    <p id="modalContents3">...</p>
+                    <div class="d-grid gap-3">
+                        <div class="col w-25">
+                            <p id="championImage"></p>
+                        </div>
+                        <div class="col align-items-start">
+                            <p class="display-6" th:text="${name}"></p>
+                            <p id="champExperience"></p>
+                            <p id="gameDuration"></p>
+                            <p id="killParticipation"></p>
+                            <p id="DamageDealtToChampions"></p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
