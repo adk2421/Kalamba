@@ -4,11 +4,22 @@
 		font-family: "Noto Sans KR", sans-serif;
 	}
 
+	.font-color-default {
+		text-shadow: none;
+		color: #444444;
+	}
+
 	.profile-icon {
 		max-width: 144px;
 		height: 100%;
 	}
 
+	.championImage {
+		max-width: 100px;
+		height: 100%;
+	}
+
+	/* Match Detail Effect */
 	.match-detail {
 		cursor: pointer;
 	}
@@ -17,10 +28,15 @@
 		box-shadow: 0px 0px 20px 5px #9e9e9e;
 	}
 
+	/* Match Result Font Color */
 	span.win {
 		color: darkcyan;
 	}
 
 	span.lose {
 		color: tomato;
+	}
+
+	span.remake {
+		color: burlywood;
 	}
