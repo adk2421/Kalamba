@@ -69,7 +69,9 @@ public class SummonerService {
             // 대상 소환사 전적 정보
             Map<String, Object> playerInfo = summonerUtil.selectPlayerInfo(participants, userPID);
             String championName = (String) playerInfo.get("championName");
-            championName = StringUtils.capitalize(championName.toLowerCase());
+            championName = StringUtils.capitalize(championName);
+            if (championName.equals("FiddleSticks"))
+                championName = "Fiddlesticks";
             Map<String, Object> champInfo = (Map<String, Object>) champInfoList.get(championName);
 
             Map<String, Object> prtPlayerInfo = new HashMap<String, Object>();
@@ -97,6 +99,9 @@ public class SummonerService {
             prtPlayerInfo.put("kills", playerInfo.get("kills"));
             prtPlayerInfo.put("deaths", playerInfo.get("deaths"));
             prtPlayerInfo.put("assists", playerInfo.get("assists"));
+
+            System.out.println(championName);
+            System.out.println(champInfo.get("name"));
 
             // #Champion
             prtPlayerInfo.put("championName", champInfo.get("name"));
