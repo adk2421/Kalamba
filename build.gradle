@@ -2,7 +2,6 @@ plugins {
 	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.12.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 group = 'com.kalamba'
@@ -21,20 +20,28 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	
 	implementation 'org.apache.httpcomponents:httpclient:4.5'
 
-	// .env
+	/* Lombok */
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	/* JPA */
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	/* MySQL */
+	implementation 'mysql:mysql-connector-java'
+
+	/* dotEnv */
 	implementation 'io.github.cdimascio:dotenv-java:2.2.4'
 
-	// JSON
+	/* JSON */
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.0'
 }
 

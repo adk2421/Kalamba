@@ -48,7 +48,7 @@ public class SummonerService {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Map<String, Object>> matchV5(String userPID, int matchCount) throws ParseException {
-        String champDataVer = (String) DdragonAPI.getDataVer("champion");
+        String champDataVer = DdragonAPI.getDataVer("champion");
 
         Map<String, Object> champInfoList = DdragonAPI.getChampInfoList(champDataVer);
 
@@ -110,12 +110,10 @@ public class SummonerService {
             if (!gameMode.equals("우르프")) {
                 prtPlayerInfo.put("teamDamagePercentage", challenges.get("teamDamagePercentage"));
 
-                
-
                 // 다시하기 예외처리
-                boolean EarlySurrender = summonerUtil.getEarlySurrender(participants);
-                if (EarlySurrender) {
-                    prtInfoDetail.put("disabledDetail", EarlySurrender);
+                boolean earlySurrender = summonerUtil.getEarlySurrender(participants);
+                if (earlySurrender) {
+                    prtInfoDetail.put("disabledDetail", earlySurrender);
                     prtPlayerInfo.put("win", "remake");
                 } else {
                     /* Detail */
@@ -123,7 +121,7 @@ public class SummonerService {
                     prtInfoDetail.put("champExperience", playerInfo.get("champExperience")); // 챔피언 숙련도
                     prtInfoDetail.put("gameDuration", summonerUtil.timeFommater(matchInfoDetail.get("gameDuration"))); // 플레이 타임
                     prtInfoDetail.put("killParticipation", summonerUtil.dpFommater(challenges.get("killParticipation"))); // 킬 관여율
-                    prtInfoDetail.put("totalDamageDealtToChampions", summonerUtil.getRank("totalDamageDealtToChampions", participants, playerInfo.get("totalDamageDealtToChampions"))); // 챔피언에게 가한 피해량
+                    prtInfoDetail.put("totalDamageDealtToChampions", summonerUtil.getRank("totalDamageDealtToChampions",participants, playerInfo.get("totalDamageDealtToChampions"))); // 챔피언에게 가한 피해량
                 }
             }
             prtPlayerInfo.put("prtInfoDetail", prtInfoDetail);
