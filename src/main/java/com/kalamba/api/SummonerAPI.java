@@ -2,10 +2,12 @@ package com.kalamba.api;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.kalamba.entity.UserEntity;
 import com.kalamba.util.SummonerUtil;
 
 public class SummonerAPI {
@@ -18,12 +20,12 @@ public class SummonerAPI {
      * @param summoner
      * @return 
      */
-    @SuppressWarnings("unchecked")
-    public Map<String, Object> getSummonerInfo(String summoner) {
+    public Optional<UserEntity> getSummonerInfo(String summoner) {
         String addURL = "/summoner/v4/summoners/by-name/";
-        String url = summonerUtil.makeURL("KR", summoner, addURL);  
+        String url = summonerUtil.makeURL("KR", summoner, addURL);
+        UserEntity userEntity = (UserEntity) API.callAPI(url, UserEntity.class);
         
-        return (Map<String, Object>) API.callAPI(url, JSONObject.class);
+        return Optional.ofNullable(userEntity);
     }
 
     /**
