@@ -20,12 +20,12 @@ public class SummonerAPI {
      * @param summoner
      * @return 
      */
-    public Optional<UserEntity> getSummonerInfo(String summoner) {
+    public UserEntity getSummonerInfo(String summoner) {
         String addURL = "/summoner/v4/summoners/by-name/";
         String url = summonerUtil.makeURL("KR", summoner, addURL);
         UserEntity userEntity = (UserEntity) API.callAPI(url, UserEntity.class);
         
-        return Optional.ofNullable(userEntity);
+        return userEntity;
     }
 
     /**

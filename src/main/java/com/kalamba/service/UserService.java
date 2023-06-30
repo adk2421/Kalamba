@@ -5,15 +5,14 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kalamba.entity.UserEntity;
 import com.kalamba.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -33,8 +32,22 @@ public class UserService {
      * 사용자 등록
      * @return
      */
-    public void regUser(Optional<UserEntity> user) {
-        // 2023-06-29 할 일 : Optional로 감싸져 있는 UserEntity 꺼내기
-        // userRepository.save(userEntity);
+    public Optional<UserEntity> regUser(UserEntity user) {
+
+        return Optional.ofNullable(userRepository.save(user));
+    }
+
+    /**
+     * 사용자 정보 업데이트
+     * @return
+     */
+    @Transactional
+    public Optional<UserEntity> updateUser(String puuid, UserEntity userEntity) {
+        Optional<UserEntity> user = userRepository.findByPuuid(puuid);
+
+        if (user.isPresent())
+            user.get().updateAll(userEntity);
+        
+        return user;
     }
 }

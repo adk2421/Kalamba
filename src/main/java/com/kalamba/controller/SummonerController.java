@@ -42,7 +42,8 @@ public class SummonerController {
         // 소환사 이름 검색 시, 앞뒤 공백 제거
         String summoner = summonerName.trim();
         // API [SUMMONER-V4]
-        Map<String, Object> summonerInfo = summonerService.summonerV4(summoner);
+        Map<String, Object> summonerInfo = null;
+        // Map<String, Object> summonerInfo = summonerService.summonerV4(summoner);
         
         // 소환사 정보 Model에 저장
         model.addAllAttributes(summonerInfo);

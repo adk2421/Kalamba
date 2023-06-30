@@ -3,21 +3,25 @@ package com.kalamba.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.kalamba.api.API;
 import com.kalamba.api.DDragonAPI;
 import com.kalamba.api.SummonerAPI;
+import com.kalamba.entity.UserEntity;
 import com.kalamba.util.SummonerUtil;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
+@Service
 public class SummonerService {
     // .env 로드
     Dotenv dotenv = Dotenv.load();
@@ -27,14 +31,14 @@ public class SummonerService {
     API API = new API();
     SummonerAPI summonerAPI = new SummonerAPI();
     SummonerUtil summonerUtil = new SummonerUtil();
-    DDragonAPI DdragonAPI = new DDragonAPI();
+    DDragonAPI dDragonAPI = new DDragonAPI();
     
     /**
      * 📢[ API 'SUMMONER-V4' ]
      * @param summoner
      * @return 
      */
-    public Map<String, Object> summonerV4(String summoner) {
+    public UserEntity summonerV4(String summoner) {
 
         return summonerAPI.getSummonerInfo(summoner);
     }
@@ -48,9 +52,9 @@ public class SummonerService {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Map<String, Object>> matchV5(String userPID, int matchCount) throws ParseException {
-        String champDataVer = DdragonAPI.getDataVer("champion");
+        String champDataVer = dDragonAPI.getDataVer("champion");
 
-        Map<String, Object> champInfoList = DdragonAPI.getChampInfoList(champDataVer);
+        Map<String, Object> champInfoList = dDragonAPI.getChampInfoList(champDataVer);
 
         // 플레이한 게임 리스트 가져오기
         ArrayList<String> matchIdList = summonerAPI.getMatchList(userPID, matchCount);

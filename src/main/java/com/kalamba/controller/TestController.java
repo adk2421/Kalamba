@@ -38,7 +38,7 @@ public class TestController {
      */
     @GetMapping("select-id")
     public Optional<TestEntity> findData() {
-        return testRepository.findById(5L);
+        return testRepository.findById(1L);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TestController {
     /**
      * 데이터 수정 - 사용자 정의 쿼리
      * @return
-     * Error: For queries with named parameters you need to use provide names for method parameters. - Repository에 파라미터를 명시해주지 않음
+     * Error: For queries with named parameters you need to use provide names for method parameters. - Repository에 파라미터를 명시해주지 않음 ( @Param )
      */
     @Transactional
     @PutMapping("update")
